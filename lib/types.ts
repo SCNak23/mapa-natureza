@@ -50,6 +50,7 @@ export const PARK_AMENITIES = [
   { id: 'piquenique', label: 'Área de piquenique', emoji: '🧺' },
   { id: 'gramado', label: 'Gramado', emoji: '🌱' },
   { id: 'aves', label: 'Observar aves', emoji: '🐦' },
+  { id: 'naturalizado', label: 'Parque naturalizado', emoji: '🌾' },
 ]
 
 export interface ParkSuggestion {
