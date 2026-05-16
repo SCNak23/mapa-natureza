@@ -14,19 +14,20 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
   const mapInstanceRef = useRef<import('leaflet').Map | null>(null)
   const markersRef = useRef<import('leaflet').Marker[]>([])
   const [userPos, setUserPos] = useState<[number, number] | null>(null)
+  const [mapReady, setMapReady] = useState(false)
 
   useEffect(() => {
     navigator.geolocation?.getCurrentPosition(
       (pos) => setUserPos([pos.coords.latitude, pos.coords.longitude]),
-      () => setUserPos([-23.55052, -46.633308]) // São Paulo fallback
+      () => setUserPos([-23.55052, -46.633308])
     )
   }, [])
 
+  // Inicializa o mapa quando userPos estiver disponível
   useEffect(() => {
     if (!mapRef.current || !userPos || mapInstanceRef.current) return
 
     import('leaflet').then((L) => {
-      // Fix default icon path issue with webpack
       delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
       L.Icon.Default.mergeOptions({
         iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -42,11 +43,10 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
         maxZoom: 19,
       }).addTo(map)
 
-      // User location marker
       const userIcon = L.divIcon({
-        html: '<div class="w-4 h-4 bg-blue-500 border-2 border-white rounded-full shadow-lg"></div>',
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
+        html: '<div style="width:14px;height:14px;background:#3b82f6;border:2px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
         className: '',
       })
       L.marker(userPos, { icon: userIcon }).addTo(map).bindPopup('Você está aqui')
@@ -56,14 +56,17 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
           onMapClick(e.latlng.lat, e.latlng.lng)
         })
       }
+
+      // Sinaliza que o mapa está pronto para receber marcadores
+      setMapReady(true)
     })
   }, [userPos, onMapClick])
 
+  // Atualiza marcadores sempre que parks ou mapReady mudar
   useEffect(() => {
-    if (!mapInstanceRef.current) return
+    if (!mapReady || !mapInstanceRef.current) return
 
     import('leaflet').then((L) => {
-      // Remove old markers
       markersRef.current.forEach((m) => m.remove())
       markersRef.current = []
 
@@ -89,7 +92,7 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
         markersRef.current.push(marker)
       })
     })
-  }, [parks, onParkClick])
+  }, [parks, onParkClick, mapReady])
 
   return (
     <div ref={mapRef} className="w-full h-full rounded-xl" />
