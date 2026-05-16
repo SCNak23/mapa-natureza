@@ -1,0 +1,112 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import type { Park } from '@/lib/types'
+import ParkModal from '@/components/ParkModal'
+import SuggestParkForm from '@/components/SuggestParkForm'
+
+const MapView = dynamic(() => import('@/components/MapView'), { ssr: false })
+
+export default function Home() {
+  const [parks, setParks] = useState<Park[]>([])
+  const [selectedPark, setSelectedPark] = useState<Park | null>(null)
+  const [showSuggest, setShowSuggest] = useState(false)
+  const [clickedCoords, setClickedCoords] = useState<{ lat: number; lng: number } | null>(null)
+
+  useEffect(() => {
+    supabase
+      .from('parks')
+      .select('*')
+      .eq('status', 'approved')
+      .then(({ data }) => setParks(data ?? []))
+  }, [])
+
+  const handleMapClick = (lat: number, lng: number) => {
+    setClickedCoords({ lat, lng })
+  }
+
+  return (
+    <div className="relative flex flex-col h-screen bg-gray-100 overflow-hidden">
+      {/* Header */}
+      <header className="relative z-10 bg-green-700 text-white px-4 py-3 flex items-center justify-between shadow-md shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🌳</span>
+          <div>
+            <h1 className="font-bold text-base leading-tight">Natureza Perto de Mim</h1>
+            <p className="text-green-200 text-xs">Praças e brincadeiras com a natureza</p>
+          </div>
+        </div>
+        <button
+          onClick={() => { setShowSuggest(true); setClickedCoords(null) }}
+          className="bg-white/20 hover:bg-white/30 text-white text-xs font-medium px-3 py-2 rounded-xl transition-colors"
+        >
+          + Sugerir praça
+        </button>
+      </header>
+
+      {/* Map */}
+      <div className="flex-1 relative">
+        <MapView
+          parks={parks}
+          onParkClick={setSelectedPark}
+          onMapClick={handleMapClick}
+        />
+
+        {/* Tap hint */}
+        {parks.length === 0 && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur rounded-xl px-4 py-2 text-sm text-gray-600 shadow pointer-events-none">
+            Carregando praças...
+          </div>
+        )}
+
+        {/* Click to suggest nudge */}
+        {clickedCoords && !showSuggest && (
+          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl px-5 py-3 flex items-center gap-3">
+            <span className="text-2xl">📍</span>
+            <div>
+              <p className="text-sm font-medium text-gray-800">Tem uma praça aqui?</p>
+              <p className="text-xs text-gray-500">Localização marcada no mapa</p>
+            </div>
+            <button
+              onClick={() => setShowSuggest(true)}
+              className="bg-green-700 text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-green-800 transition-colors"
+            >
+              Sugerir
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom legend */}
+      <div className="relative z-10 bg-white border-t px-4 py-2 flex items-center justify-between shrink-0">
+        <p className="text-xs text-gray-400">
+          {parks.length} praça{parks.length !== 1 ? 's' : ''} mapeada{parks.length !== 1 ? 's' : ''}
+        </p>
+        <p className="text-xs text-gray-400">Toque em 🌳 para ver brincadeiras</p>
+      </div>
+
+      {/* Park modal */}
+      {selectedPark && (
+        <ParkModal park={selectedPark} onClose={() => setSelectedPark(null)} />
+      )}
+
+      {/* Suggest park drawer */}
+      {showSuggest && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowSuggest(false)}>
+          <div
+            className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SuggestParkForm
+              initialLat={clickedCoords?.lat}
+              initialLng={clickedCoords?.lng}
+              onDone={() => { setShowSuggest(false); setClickedCoords(null) }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
