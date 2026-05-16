@@ -38,6 +38,7 @@ export default function Home() {
             <p className="text-xs opacity-70">
               Praças e brincadeiras com a natureza{' '}
               <span className="opacity-50">|</span>{' '}
+              criado por{' '}
               <a
                 href="https://www.sercriancaenatural.com"
                 target="_blank"
