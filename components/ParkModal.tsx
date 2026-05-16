@@ -47,7 +47,7 @@ export default function ParkModal({ park, onClose }: Props) {
           )}
 
           {/* Amenidades */}
-          {park.amenities?.length > 0 && (
+          {(park.amenities?.length ?? 0) > 0 && (
             <div>
               <h3 className="font-semibold text-green-800 mb-2">O que tem aqui</h3>
               <div className="flex flex-wrap gap-2">

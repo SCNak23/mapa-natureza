@@ -8,7 +8,7 @@ export interface Park {
   longitude: number
   address: string | null
   trees: string[]
-  amenities: string[]
+  amenities: string[] | null
   status: ParkStatus
   suggested_by: string | null
   created_at: string
