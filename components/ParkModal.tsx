@@ -53,7 +53,7 @@ export default function ParkModal({ park, onClose }: Props) {
             <div>
               <h3 className="font-semibold text-green-800 mb-2">O que tem aqui</h3>
               <div className="flex flex-wrap gap-2">
-                {park.amenities.map((id) => {
+                {(park.amenities ?? []).map((id) => {
                   const item = PARK_AMENITIES.find((a) => a.id === id)
                   return item ? (
                     <span key={id} className="bg-green-50 border border-green-200 text-green-800 text-xs px-3 py-1 rounded-full">
