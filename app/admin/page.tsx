@@ -166,6 +166,12 @@ export default function AdminPage() {
                     Cancelar
                   </button>
                 </div>
+                <button
+                  onClick={() => { if (confirm(`Excluir "${editingPark.name}"? Esta ação não pode ser desfeita.`)) { rejectPark(editingPark.id); setEditingPark(null) } }}
+                  className="w-full bg-red-50 text-red-600 border border-red-200 rounded-lg py-2 text-sm font-medium hover:bg-red-100 transition-colors"
+                >
+                  🗑️ Excluir esta praça
+                </button>
               </div>
             ) : (
               <div className="flex items-start justify-between gap-4">
@@ -224,12 +230,17 @@ export default function AdminPage() {
                   {idea.suggested_by && <span>· {idea.suggested_by}</span>}
                 </div>
               </div>
-              {idea.status === 'pending' && (
-                <div className="flex gap-2 shrink-0">
+              <div className="flex gap-2 shrink-0">
+                {idea.status === 'pending' && <>
                   <button onClick={() => approveIdea(idea.id)} className="bg-green-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-green-700 transition-colors">✓ Aprovar</button>
                   <button onClick={() => rejectIdea(idea.id)} className="bg-red-50 text-red-600 border border-red-200 text-sm px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors">✕ Recusar</button>
-                </div>
-              )}
+                </>}
+                {idea.status === 'approved' && (
+                  <button onClick={() => { if (confirm('Excluir esta brincadeira?')) rejectIdea(idea.id) }} className="bg-red-50 text-red-600 border border-red-200 text-sm px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors">
+                    🗑️ Excluir
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}
