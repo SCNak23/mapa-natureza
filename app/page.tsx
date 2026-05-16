@@ -35,7 +35,19 @@ export default function Home() {
           <span className="text-2xl">🌳</span>
           <div>
             <h1 className="font-bold text-base leading-tight">Natureza Perto de Mim</h1>
-            <p className="text-xs opacity-70">Praças e brincadeiras com a natureza</p>
+            <p className="text-xs opacity-70">
+              Praças e brincadeiras com a natureza{' '}
+              <span className="opacity-50">|</span>{' '}
+              <a
+                href="https://www.sercriancaenatural.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#3B2E1E' }}
+                className="underline hover:opacity-80"
+              >
+                Ser Criança é Natural
+              </a>
+            </p>
           </div>
         </div>
         <button

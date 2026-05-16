@@ -57,7 +57,6 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
         })
       }
 
-      // Sinaliza que o mapa está pronto para receber marcadores
       setMapReady(true)
     })
   }, [userPos, onMapClick])
@@ -91,6 +90,12 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
           .on('click', () => onParkClick(park))
         markersRef.current.push(marker)
       })
+
+      // Ajusta o mapa para mostrar todos os pins
+      if (parks.length > 0) {
+        const bounds = L.latLngBounds(parks.map((p) => [p.latitude, p.longitude]))
+        mapInstanceRef.current!.fitBounds(bounds, { padding: [60, 60], maxZoom: 15 })
+      }
     })
   }, [parks, onParkClick, mapReady])
 
