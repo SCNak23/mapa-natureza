@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea } from '@/lib/types'
+import { TREE_PARTS } from '@/lib/types'
 import SuggestIdeaForm from './SuggestIdeaForm'
 
 interface Props {
@@ -74,6 +75,18 @@ export default function ParkModal({ park, onClose }: Props) {
                   <div key={idea.id} className="bg-amber-50 border border-amber-100 rounded-xl p-4">
                     <h4 className="font-semibold text-amber-900">{idea.title}</h4>
                     <p className="text-amber-800 text-sm mt-1 leading-relaxed">{idea.description}</p>
+                    {idea.tree_parts?.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {idea.tree_parts.map((partId) => {
+                          const part = TREE_PARTS.find((p) => p.id === partId)
+                          return part ? (
+                            <span key={partId} className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                              {part.emoji} {part.label}
+                            </span>
+                          ) : null
+                        })}
+                      </div>
+                    )}
                     <div className="flex gap-3 mt-2 text-xs text-amber-600">
                       {idea.age_range && <span>👶 {idea.age_range}</span>}
                       {idea.materials && <span>🧺 {idea.materials}</span>}

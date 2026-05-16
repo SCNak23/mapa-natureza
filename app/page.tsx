@@ -30,17 +30,18 @@ export default function Home() {
   return (
     <div className="relative flex flex-col h-screen bg-gray-100 overflow-hidden">
       {/* Header */}
-      <header className="relative z-10 bg-green-700 text-white px-4 py-3 flex items-center justify-between shadow-md shrink-0">
+      <header style={{ background: '#E8C84A', color: '#3B2E1E' }} className="relative z-10 px-4 py-3 flex items-center justify-between shadow-md shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🌳</span>
           <div>
             <h1 className="font-bold text-base leading-tight">Natureza Perto de Mim</h1>
-            <p className="text-green-200 text-xs">Praças e brincadeiras com a natureza</p>
+            <p className="text-xs opacity-70">Praças e brincadeiras com a natureza</p>
           </div>
         </div>
         <button
           onClick={() => { setShowSuggest(true); setClickedCoords(null) }}
-          className="bg-white/20 hover:bg-white/30 text-white text-xs font-medium px-3 py-2 rounded-xl transition-colors"
+          style={{ background: 'rgba(59,46,30,0.12)', color: '#3B2E1E' }}
+          className="text-xs font-medium px-3 py-2 rounded-xl hover:opacity-80 transition-opacity"
         >
           + Sugerir praça
         </button>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { TREE_PARTS } from '@/lib/types'
 
 interface Props {
   parkId: string
@@ -16,10 +17,17 @@ export default function SuggestIdeaForm({ parkId, onDone }: Props) {
     materials: '',
     suggested_by: '',
   })
+  const [treeParts, setTreeParts] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
 
   const set = (key: string, val: string) => setForm((f) => ({ ...f, [key]: val }))
+
+  const togglePart = (id: string) => {
+    setTreeParts((prev) =>
+      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
+    )
+  }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,6 +38,7 @@ export default function SuggestIdeaForm({ parkId, onDone }: Props) {
       description: form.description,
       age_range: form.age_range || null,
       materials: form.materials || null,
+      tree_parts: treeParts,
       suggested_by: form.suggested_by || null,
       status: 'pending',
     })
@@ -72,6 +81,31 @@ export default function SuggestIdeaForm({ parkId, onDone }: Props) {
           rows={3}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
         />
+      </div>
+
+      {/* Partes da árvore */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-2">Partes da árvore usadas</label>
+        <div className="flex flex-wrap gap-2">
+          {TREE_PARTS.map((part) => {
+            const selected = treeParts.includes(part.id)
+            return (
+              <button
+                key={part.id}
+                type="button"
+                onClick={() => togglePart(part.id)}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                  selected
+                    ? 'bg-green-700 text-white border-green-700'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                }`}
+              >
+                <span>{part.emoji}</span>
+                <span>{part.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
