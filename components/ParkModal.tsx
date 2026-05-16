@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea } from '@/lib/types'
-import { TREE_PARTS } from '@/lib/types'
+import { TREE_PARTS, PARK_AMENITIES } from '@/lib/types'
 import SuggestIdeaForm from './SuggestIdeaForm'
 
 interface Props {
@@ -46,12 +46,27 @@ export default function ParkModal({ park, onClose }: Props) {
             <p className="text-gray-600 text-sm leading-relaxed">{park.description}</p>
           )}
 
+          {/* Amenidades */}
+          {park.amenities?.length > 0 && (
+            <div>
+              <h3 className="font-semibold text-green-800 mb-2">O que tem aqui</h3>
+              <div className="flex flex-wrap gap-2">
+                {park.amenities.map((id) => {
+                  const item = PARK_AMENITIES.find((a) => a.id === id)
+                  return item ? (
+                    <span key={id} className="bg-green-50 border border-green-200 text-green-800 text-xs px-3 py-1 rounded-full">
+                      {item.emoji} {item.label}
+                    </span>
+                  ) : null
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Trees */}
           {park.trees?.length > 0 && (
             <div>
-              <h3 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
-                🌿 Árvores identificadas
-              </h3>
+              <h3 className="font-semibold text-green-800 mb-2">🌳 Árvores identificadas</h3>
               <div className="flex flex-wrap gap-2">
                 {park.trees.map((tree) => (
                   <span key={tree} className="bg-green-50 border border-green-200 text-green-800 text-xs px-3 py-1 rounded-full">
@@ -64,9 +79,7 @@ export default function ParkModal({ park, onClose }: Props) {
 
           {/* Play ideas */}
           <div>
-            <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
-              🎮 Brincadeiras com a natureza
-            </h3>
+            <h3 className="font-semibold text-green-800 mb-3">🌱 Brincadeiras com a natureza</h3>
             {ideas.length === 0 ? (
               <p className="text-gray-400 text-sm italic">Nenhuma brincadeira cadastrada ainda. Seja o primeiro!</p>
             ) : (
@@ -88,8 +101,8 @@ export default function ParkModal({ park, onClose }: Props) {
                       </div>
                     )}
                     <div className="flex gap-3 mt-2 text-xs text-amber-600">
-                      {idea.age_range && <span>👶 {idea.age_range}</span>}
-                      {idea.materials && <span>🧺 {idea.materials}</span>}
+                      {idea.age_range && <span>🌿 {idea.age_range}</span>}
+                      {idea.materials && <span>🍃 {idea.materials}</span>}
                     </div>
                   </div>
                 ))}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { PARK_AMENITIES } from '@/lib/types'
 
 interface Props {
   initialLat?: number
@@ -19,11 +20,18 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
     trees: '',
     suggested_by: '',
   })
+  const [amenities, setAmenities] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [geoLoading, setGeoLoading] = useState(false)
 
   const set = (key: string, val: string) => setForm((f) => ({ ...f, [key]: val }))
+
+  const toggleAmenity = (id: string) => {
+    setAmenities((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    )
+  }
 
   const useMyLocation = () => {
     setGeoLoading(true)
@@ -52,6 +60,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
       latitude: parseFloat(form.latitude),
       longitude: parseFloat(form.longitude),
       trees,
+      amenities,
       suggested_by: form.suggested_by || null,
       status: 'pending',
     })
@@ -134,14 +143,39 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Descrição</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Descrição — como você descreveria esse lugar?</label>
           <textarea
             value={form.description}
             onChange={(e) => set('description', e.target.value)}
-            placeholder="Descreva o espaço: tem sombra? banco? espaço aberto?..."
-            rows={2}
+            placeholder="Ex: Um cantinho cheio de figueiras centenárias, ótimo para deitar na grama e observar os pássaros..."
+            rows={3}
             className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
           />
+        </div>
+
+        {/* Amenidades */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-2">O que tem nesse parque?</label>
+          <div className="flex flex-wrap gap-2">
+            {PARK_AMENITIES.map((item) => {
+              const selected = amenities.includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => toggleAmenity(item.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    selected
+                      ? 'bg-green-700 text-white border-green-700'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                  }`}
+                >
+                  <span>{item.emoji}</span>
+                  <span>{item.label}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         <div>
