@@ -60,6 +60,11 @@ export default function AdminPage() {
     setSuggestions((ss) => ss.map((s) => (s.id === id ? { ...s, status: 'reviewed' } : s)))
   }
 
+  const rejectSuggestion = async (id: string) => {
+    await supabase.from('park_suggestions').delete().eq('id', id)
+    setSuggestions((ss) => ss.filter((s) => s.id !== id))
+  }
+
   const saveParkEdit = async () => {
     if (!editingPark) return
     const trees = typeof editingPark.trees === 'string'
@@ -249,15 +254,19 @@ export default function AdminPage() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 shrink-0">
-                  {s.status === 'pending' && (
-                    <button onClick={() => markSuggestionReviewed(s.id)} className="bg-gray-100 text-gray-600 text-sm px-3 py-1.5 rounded-lg hover:bg-gray-200 transition-colors whitespace-nowrap">
-                      ✓ Marcar revisada
+                  {s.status === 'pending' && <>
+                    <button onClick={() => { setTab('parks'); setEditingPark(park ?? null); markSuggestionReviewed(s.id) }}
+                      className="bg-green-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-green-700 transition-colors whitespace-nowrap">
+                      ✏️ Aplicar edição
                     </button>
+                    <button onClick={() => rejectSuggestion(s.id)}
+                      className="bg-red-50 text-red-600 border border-red-200 text-sm px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap">
+                      ✕ Recusar
+                    </button>
+                  </>}
+                  {s.status === 'reviewed' && (
+                    <span className="text-xs text-gray-400 italic">Aplicada</span>
                   )}
-                  <button onClick={() => { setTab('parks'); setEditingPark(park ?? null) }}
-                    className="bg-blue-50 text-blue-600 border border-blue-200 text-sm px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap">
-                    ✏️ Editar praça
-                  </button>
                 </div>
               </div>
             </div>
