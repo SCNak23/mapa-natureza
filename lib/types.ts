@@ -38,14 +38,27 @@ export const TREE_PARTS = [
 ]
 
 export const PARK_AMENITIES = [
-  { id: 'banheiro', label: 'Banheiro', emoji: '🚿' },
-  { id: 'bebedouro', label: 'Bebedouro', emoji: '💧' },
-  { id: 'trilha', label: 'Trilha', emoji: '🥾' },
+  { id: 'banheiro', label: 'Banheiro', emoji: '🚽' },
+  { id: 'agua_beber', label: 'Água para beber', emoji: '💧' },
+  { id: 'agua_brincar', label: 'Água para brincar', emoji: '💦' },
+  { id: 'trilha', label: 'Trilha / pista', emoji: '🥾' },
+  { id: 'bosque', label: 'Bosque', emoji: '🌲' },
+  { id: 'barranco', label: 'Barranco', emoji: '⛰️' },
   { id: 'area_sombreada', label: 'Área sombreada', emoji: '🌿' },
+  { id: 'poucas_arvores', label: 'Poucas árvores', emoji: '🌳' },
   { id: 'bancos', label: 'Bancos', emoji: '🪵' },
   { id: 'mesa', label: 'Mesa', emoji: '🍃' },
   { id: 'gramado', label: 'Gramado', emoji: '🌱' },
 ]
+
+export interface ParkSuggestion {
+  id: string
+  park_id: string
+  message: string
+  suggested_by: string | null
+  status: 'pending' | 'reviewed'
+  created_at: string
+}
 
 export type NewPark = Omit<Park, 'id' | 'created_at' | 'status'>
 export type NewPlayIdea = Omit<PlayIdea, 'id' | 'created_at' | 'status'>

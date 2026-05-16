@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea } from '@/lib/types'
 import { TREE_PARTS, PARK_AMENITIES } from '@/lib/types'
 import SuggestIdeaForm from './SuggestIdeaForm'
+import SuggestParkUpdateForm from './SuggestParkUpdateForm'
 
 interface Props {
   park: Park
@@ -14,6 +15,7 @@ interface Props {
 export default function ParkModal({ park, onClose }: Props) {
   const [ideas, setIdeas] = useState<PlayIdea[]>([])
   const [showForm, setShowForm] = useState(false)
+  const [showUpdateForm, setShowUpdateForm] = useState(false)
 
   useEffect(() => {
     supabase
@@ -119,6 +121,18 @@ export default function ParkModal({ park, onClose }: Props) {
               className="w-full border-2 border-dashed border-green-300 text-green-700 rounded-xl py-3 text-sm font-medium hover:bg-green-50 transition-colors"
             >
               + Sugerir uma brincadeira
+            </button>
+          )}
+
+          {/* Suggest update */}
+          {showUpdateForm ? (
+            <SuggestParkUpdateForm parkId={park.id} parkName={park.name} onDone={() => setShowUpdateForm(false)} />
+          ) : (
+            <button
+              onClick={() => setShowUpdateForm(true)}
+              className="w-full text-xs text-gray-400 hover:text-amber-600 py-2 transition-colors"
+            >
+              ✏️ Sugerir correção ou nova espécie
             </button>
           )}
         </div>
