@@ -46,9 +46,10 @@ export const PARK_AMENITIES = [
   { id: 'barranco', label: 'Barranco', emoji: '⛰️' },
   { id: 'area_sombreada', label: 'Área sombreada', emoji: '🌿' },
   { id: 'poucas_arvores', label: 'Poucas árvores', emoji: '🌳' },
-  { id: 'bancos', label: 'Bancos', emoji: '🪵' },
-  { id: 'mesa', label: 'Mesa', emoji: '🍃' },
+  { id: 'contemplacao', label: 'Área de contemplação e descanso', emoji: '🪵' },
+  { id: 'piquenique', label: 'Área de piquenique', emoji: '🧺' },
   { id: 'gramado', label: 'Gramado', emoji: '🌱' },
+  { id: 'aves', label: 'Observar aves', emoji: '🐦' },
 ]
 
 export interface ParkSuggestion {
