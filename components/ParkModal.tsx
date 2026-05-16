@@ -16,6 +16,7 @@ export default function ParkModal({ park, onClose }: Props) {
   const [ideas, setIdeas] = useState<PlayIdea[]>([])
   const [showForm, setShowForm] = useState(false)
   const [showUpdateForm, setShowUpdateForm] = useState(false)
+  const [expandedIdea, setExpandedIdea] = useState<string | null>(null)
 
   useEffect(() => {
     supabase
@@ -85,29 +86,50 @@ export default function ParkModal({ park, onClose }: Props) {
             {ideas.length === 0 ? (
               <p className="text-gray-400 text-sm italic">Nenhuma brincadeira cadastrada ainda. Seja o primeiro!</p>
             ) : (
-              <div className="space-y-3">
-                {ideas.map((idea) => (
-                  <div key={idea.id} className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-                    <h4 className="font-semibold text-amber-900">{idea.title}</h4>
-                    <p className="text-amber-800 text-sm mt-1 leading-relaxed">{idea.description}</p>
-                    {idea.tree_parts?.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {idea.tree_parts.map((partId) => {
-                          const part = TREE_PARTS.find((p) => p.id === partId)
-                          return part ? (
-                            <span key={partId} className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
-                              {part.emoji} {part.label}
-                            </span>
-                          ) : null
-                        })}
-                      </div>
-                    )}
-                    <div className="flex gap-3 mt-2 text-xs text-amber-600">
-                      {idea.age_range && <span>🌿 {idea.age_range}</span>}
-                      {idea.materials && <span>🍃 {idea.materials}</span>}
+              <div className="space-y-2">
+                {ideas.map((idea) => {
+                  const isOpen = expandedIdea === idea.id
+                  return (
+                    <div key={idea.id} className="bg-amber-50 border border-amber-100 rounded-xl overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setExpandedIdea(isOpen ? null : idea.id)}
+                        className="w-full text-left px-4 py-3 flex items-center justify-between gap-3"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-amber-900 text-sm">{idea.title}</h4>
+                          {idea.age_range && (
+                            <span className="text-xs text-amber-600">🌿 {idea.age_range}</span>
+                          )}
+                        </div>
+                        <span className="text-amber-400 text-lg leading-none shrink-0">
+                          {isOpen ? '▾' : '▸'}
+                        </span>
+                      </button>
+
+                      {isOpen && (
+                        <div className="px-4 pb-4 border-t border-amber-100">
+                          <p className="text-amber-800 text-sm mt-3 leading-relaxed">{idea.description}</p>
+                          {idea.tree_parts?.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-3">
+                              {idea.tree_parts.map((partId) => {
+                                const part = TREE_PARTS.find((p) => p.id === partId)
+                                return part ? (
+                                  <span key={partId} className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                                    {part.emoji} {part.label}
+                                  </span>
+                                ) : null
+                              })}
+                            </div>
+                          )}
+                          {idea.materials && (
+                            <p className="text-xs text-amber-600 mt-2">🍃 {idea.materials}</p>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>
