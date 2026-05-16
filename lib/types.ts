@@ -11,6 +11,7 @@ export interface Park {
   amenities: string[] | null
   status: ParkStatus
   suggested_by: string | null
+  email: string | null
   created_at: string
 }
 
@@ -24,6 +25,7 @@ export interface PlayIdea {
   tree_parts: string[]
   status: ParkStatus
   suggested_by: string | null
+  email: string | null
   created_at: string
 }
 

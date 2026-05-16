@@ -19,6 +19,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
     longitude: initialLng?.toString() ?? '',
     trees: '',
     suggested_by: '',
+    email: '',
   })
   const [amenities, setAmenities] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
@@ -61,7 +62,8 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
       longitude: parseFloat(form.longitude),
       trees,
       amenities,
-      suggested_by: form.suggested_by || null,
+      suggested_by: form.suggested_by,
+      email: form.email,
       status: 'pending',
     })
     setLoading(false)
@@ -189,13 +191,27 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Seu nome (opcional)</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Seu nome *</label>
           <input
+            required
             value={form.suggested_by}
             onChange={(e) => set('suggested_by', e.target.value)}
             placeholder="Como você quer ser chamado?"
             className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
           />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Seu e-mail *</label>
+          <input
+            required
+            type="email"
+            value={form.email}
+            onChange={(e) => set('email', e.target.value)}
+            placeholder="Para contato, se precisarmos de mais informações"
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+          <p className="text-xs text-gray-400 mt-1">Não será exibido publicamente.</p>
         </div>
 
         <button

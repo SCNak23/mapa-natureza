@@ -187,6 +187,7 @@ export default function AdminPage() {
                   <p className="text-xs text-gray-400 mt-1">
                     📍 {park.latitude?.toFixed(5)}, {park.longitude?.toFixed(5)}
                     {park.suggested_by && ` · por ${park.suggested_by}`}
+                    {park.email && <span className="ml-1 text-blue-400">· {park.email}</span>}
                   </p>
                   {park.trees?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
@@ -228,6 +229,7 @@ export default function AdminPage() {
                   {idea.age_range && <span>🌿 {idea.age_range}</span>}
                   {idea.materials && <span>🍃 {idea.materials}</span>}
                   {idea.suggested_by && <span>· {idea.suggested_by}</span>}
+                  {idea.email && <span className="text-blue-400">· {idea.email}</span>}
                 </div>
               </div>
               <div className="flex gap-2 shrink-0">
