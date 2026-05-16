@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea, ParkSuggestion } from '@/lib/types'
+import { PARK_AMENITIES } from '@/lib/types'
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? 'scn2024'
 
@@ -69,6 +70,7 @@ export default function AdminPage() {
       description: editingPark.description,
       address: editingPark.address,
       trees,
+      amenities: editingPark.amenities ?? [],
     }).eq('id', editingPark.id)
     setParks((ps) => ps.map((p) => (p.id === editingPark.id ? { ...editingPark, trees } : p)))
     setEditingPark(null)
@@ -131,6 +133,26 @@ export default function AdminPage() {
                 <input value={Array.isArray(editingPark.trees) ? editingPark.trees.join(', ') : editingPark.trees ?? ''}
                   onChange={(e) => setEditingPark({ ...editingPark, trees: e.target.value as unknown as string[] })}
                   className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Árvores (separadas por vírgula)" />
+                <div>
+                  <p className="text-xs font-medium text-gray-600 mb-2">O que tem nesse parque?</p>
+                  <div className="flex flex-wrap gap-2">
+                    {PARK_AMENITIES.map((item) => {
+                      const selected = (editingPark.amenities ?? []).includes(item.id)
+                      return (
+                        <button key={item.id} type="button"
+                          onClick={() => {
+                            const current = editingPark.amenities ?? []
+                            const updated = selected ? current.filter((a) => a !== item.id) : [...current, item.id]
+                            setEditingPark({ ...editingPark, amenities: updated })
+                          }}
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${selected ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'}`}
+                        >
+                          {item.emoji} {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
                 <div className="flex gap-2">
                   <button onClick={saveParkEdit} className="flex-1 bg-green-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-green-700 transition-colors">
                     💾 Salvar
