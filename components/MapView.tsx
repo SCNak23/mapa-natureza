@@ -68,9 +68,17 @@ export default function MapView({ parks, onParkClick, onMapClick }: Props) {
       markersRef.current = []
 
       const parkIcon = L.divIcon({
-        html: `<div style="font-size:28px;line-height:1;">🌳</div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
+        html: `<div style="
+          background:#2d6a4f;
+          border:3px solid white;
+          border-radius:50% 50% 50% 0;
+          transform:rotate(-45deg);
+          width:36px;height:36px;
+          box-shadow:0 2px 6px rgba(0,0,0,0.4);
+          display:flex;align-items:center;justify-content:center;
+        "><span style="transform:rotate(45deg);font-size:18px;line-height:1;">🌳</span></div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
         className: '',
       })
 
