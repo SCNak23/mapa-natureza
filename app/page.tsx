@@ -94,9 +94,12 @@ export default function Home() {
 
       {/* Suggest park drawer */}
       {showSuggest && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowSuggest(false)}>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(0,0,0,0.5)' }}
+          onClick={() => setShowSuggest(false)}
+        >
           <div
-            className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            style={{ background: 'white', borderRadius: '1.25rem 1.25rem 0 0', width: '100%', maxWidth: '32rem', maxHeight: '90dvh', overflowY: 'auto' }}
             onClick={(e) => e.stopPropagation()}
           >
             <SuggestParkForm

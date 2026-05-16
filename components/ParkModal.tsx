@@ -25,9 +25,9 @@ export default function ParkModal({ park, onClose }: Props) {
   }, [park.id])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={onClose}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '1rem', background: 'rgba(0,0,0,0.5)' }} onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto"
+        style={{ background: 'white', borderRadius: '1rem', width: '100%', maxWidth: '32rem', maxHeight: '90dvh', overflowY: 'auto' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
