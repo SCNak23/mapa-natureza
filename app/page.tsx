@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park } from '@/lib/types'
@@ -32,7 +33,7 @@ export default function Home() {
       {/* Header */}
       <header style={{ background: '#E8C84A', color: '#3B2E1E' }} className="relative z-10 px-4 py-3 flex items-center justify-between shadow-md shrink-0">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🌳</span>
+          <Image src="/logo.png" alt="Natureza Perto de Mim" width={48} height={48} className="rounded-lg object-contain" />
           <div>
             <h1 className="font-bold text-base leading-tight">Natureza Perto de Mim</h1>
             <p className="text-xs opacity-70">
