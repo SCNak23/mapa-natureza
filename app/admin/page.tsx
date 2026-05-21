@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea, ParkSuggestion } from '@/lib/types'
-import { PARK_AMENITIES } from '@/lib/types'
+import { PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? 'scn2024'
 
@@ -76,6 +76,7 @@ export default function AdminPage() {
       address: editingPark.address,
       trees,
       amenities: editingPark.amenities ?? [],
+      suitable_for: editingPark.suitable_for ?? [],
     }).eq('id', editingPark.id)
     setParks((ps) => ps.map((p) => (p.id === editingPark.id ? { ...editingPark, trees } : p)))
     setEditingPark(null)
@@ -138,6 +139,26 @@ export default function AdminPage() {
                 <input value={Array.isArray(editingPark.trees) ? editingPark.trees.join(', ') : editingPark.trees ?? ''}
                   onChange={(e) => setEditingPark({ ...editingPark, trees: e.target.value as unknown as string[] })}
                   className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Árvores (separadas por vírgula)" />
+                <div>
+                  <p className="text-xs font-medium text-gray-600 mb-2">Ótimo para</p>
+                  <div className="flex gap-2 mb-3">
+                    {SUITABLE_FOR.map((item) => {
+                      const selected = (editingPark.suitable_for ?? []).includes(item.id)
+                      return (
+                        <button key={item.id} type="button"
+                          onClick={() => {
+                            const current = editingPark.suitable_for ?? []
+                            const updated = selected ? current.filter((a) => a !== item.id) : [...current, item.id]
+                            setEditingPark({ ...editingPark, suitable_for: updated })
+                          }}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border-2 transition-colors ${selected ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'}`}
+                        >
+                          {item.emoji} {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
                 <div>
                   <p className="text-xs font-medium text-gray-600 mb-2">O que tem nesse parque?</p>
                   <div className="flex flex-wrap gap-2">

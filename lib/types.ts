@@ -9,6 +9,7 @@ export interface Park {
   address: string | null
   trees: string[]
   amenities: string[] | null
+  suitable_for: string[] | null
   status: ParkStatus
   suggested_by: string | null
   email: string | null
@@ -37,6 +38,11 @@ export const TREE_PARTS = [
   { id: 'tronco', label: 'Tronco / casca', emoji: '🌲' },
   { id: 'raiz', label: 'Raízes', emoji: '🌿' },
   { id: 'folha', label: 'Folha', emoji: '🍃' },
+]
+
+export const SUITABLE_FOR = [
+  { id: 'familias', label: 'Famílias', emoji: '👨‍👩‍👧' },
+  { id: 'escolas', label: 'Escolas e grupos', emoji: '🏫' },
 ]
 
 export const PARK_AMENITIES = [

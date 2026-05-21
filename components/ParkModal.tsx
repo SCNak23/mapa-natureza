@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea } from '@/lib/types'
-import { TREE_PARTS, PARK_AMENITIES } from '@/lib/types'
+import { TREE_PARTS, PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
 import SuggestIdeaForm from './SuggestIdeaForm'
 import SuggestParkUpdateForm from './SuggestParkUpdateForm'
 
@@ -44,6 +44,20 @@ export default function ParkModal({ park, onClose }: Props) {
         </div>
 
         <div className="p-5 space-y-5">
+          {/* Ótimo para */}
+          {(park.suitable_for?.length ?? 0) > 0 && (
+            <div className="flex gap-2">
+              {(park.suitable_for ?? []).map((id) => {
+                const item = SUITABLE_FOR.find((s) => s.id === id)
+                return item ? (
+                  <span key={id} style={{ background: '#E8C84A', color: '#3B2E1E' }} className="text-xs font-semibold px-3 py-1.5 rounded-full">
+                    {item.emoji} {item.label}
+                  </span>
+                ) : null
+              })}
+            </div>
+          )}
+
           {/* Description */}
           {park.description && (
             <p className="text-gray-600 text-sm leading-relaxed">{park.description}</p>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { PARK_AMENITIES } from '@/lib/types'
+import { PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
 
 interface Props {
   initialLat?: number
@@ -29,6 +29,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
     email: '',
   })
   const [amenities, setAmenities] = useState<string[]>([])
+  const [suitableFor, setSuitableFor] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [geoLoading, setGeoLoading] = useState(false)
@@ -45,6 +46,12 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
 
   const toggleAmenity = (id: string) => {
     setAmenities((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    )
+  }
+
+  const toggleSuitableFor = (id: string) => {
+    setSuitableFor((prev) =>
       prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
     )
   }
@@ -110,6 +117,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
       longitude: parseFloat(form.longitude),
       trees,
       amenities,
+      suitable_for: suitableFor,
       suggested_by: form.suggested_by,
       email: form.email,
       status: 'pending',
@@ -287,6 +295,31 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
             rows={3}
             className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
           />
+        </div>
+
+        {/* Ótimo para */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-2">Ótimo para</label>
+          <div className="flex gap-3">
+            {SUITABLE_FOR.map((item) => {
+              const selected = suitableFor.includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => toggleSuitableFor(item.id)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-colors ${
+                    selected
+                      ? 'bg-green-700 text-white border-green-700'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                  }`}
+                >
+                  <span>{item.emoji}</span>
+                  <span>{item.label}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Amenidades */}
