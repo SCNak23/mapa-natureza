@@ -57,7 +57,7 @@ export default function Home() {
           style={{ background: 'rgba(59,46,30,0.12)', color: '#3B2E1E' }}
           className="text-xs font-medium px-3 py-2 rounded-xl hover:opacity-80 transition-opacity"
         >
-          + Sugerir praça
+          + Sugerir lugar
         </button>
       </header>
 
@@ -97,9 +97,9 @@ export default function Home() {
       {/* Bottom legend */}
       <div className="relative z-10 bg-white border-t px-4 py-2 flex items-center justify-between shrink-0">
         <p className="text-xs text-gray-400">
-          {parks.length} praça{parks.length !== 1 ? 's' : ''} mapeada{parks.length !== 1 ? 's' : ''}
+          {parks.length} lugar{parks.length !== 1 ? 'es' : ''} mapeado{parks.length !== 1 ? 's' : ''}
         </p>
-        <p className="text-xs text-gray-400">Toque em 🌳 para ver brincadeiras</p>
+        <p className="text-xs text-gray-400">Toque em um pin para ver brincadeiras</p>
       </div>
 
       {/* Park modal */}

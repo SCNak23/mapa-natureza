@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
+import { PARK_AMENITIES, SUITABLE_FOR, PLACE_TYPES } from '@/lib/types'
 
 interface Props {
   initialLat?: number
@@ -28,6 +28,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
     suggested_by: '',
     email: '',
   })
+  const [placeType, setPlaceType] = useState('parque')
   const [amenities, setAmenities] = useState<string[]>([])
   const [suitableFor, setSuitableFor] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
@@ -116,6 +117,7 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
       latitude: parseFloat(form.latitude),
       longitude: parseFloat(form.longitude),
       trees,
+      place_type: placeType,
       amenities,
       suitable_for: suitableFor,
       suggested_by: form.suggested_by,
@@ -147,12 +149,34 @@ export default function SuggestParkForm({ initialLat, initialLng, onDone }: Prop
     <div className="p-5">
       <div className="flex items-center gap-2 mb-5">
         <button onClick={onDone} className="text-gray-400 hover:text-gray-600 text-xl leading-none">←</button>
-        <h2 className="text-lg font-bold text-green-800">Sugerir uma praça</h2>
+        <h2 className="text-lg font-bold text-green-800">Sugerir um lugar</h2>
       </div>
 
       <form onSubmit={submit} className="space-y-4">
+        {/* Tipo de lugar */}
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Nome da praça / parque *</label>
+          <label className="block text-xs font-medium text-gray-600 mb-2">Tipo de lugar</label>
+          <div className="flex gap-2">
+            {PLACE_TYPES.map((type) => (
+              <button
+                key={type.id}
+                type="button"
+                onClick={() => setPlaceType(type.id)}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium border-2 transition-colors ${
+                  placeType === type.id
+                    ? 'bg-green-700 text-white border-green-700'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                }`}
+              >
+                <span>{type.emoji}</span>
+                <span>{type.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Nome *</label>
           <input
             required
             value={form.name}

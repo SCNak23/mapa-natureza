@@ -1,4 +1,11 @@
 export type ParkStatus = 'pending' | 'approved'
+export type PlaceType = 'parque' | 'praca' | 'praia'
+
+export const PLACE_TYPES = [
+  { id: 'parque', label: 'Parque', emoji: '🌳' },
+  { id: 'praca', label: 'Praça', emoji: '🌸' },
+  { id: 'praia', label: 'Praia', emoji: '🏖️' },
+]
 
 export interface Park {
   id: string
@@ -8,6 +15,7 @@ export interface Park {
   longitude: number
   address: string | null
   trees: string[]
+  place_type: PlaceType | null
   amenities: string[] | null
   suitable_for: string[] | null
   status: ParkStatus

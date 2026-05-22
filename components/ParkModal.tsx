@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea } from '@/lib/types'
-import { TREE_PARTS, PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
+import { TREE_PARTS, PARK_AMENITIES, SUITABLE_FOR, PLACE_TYPES } from '@/lib/types'
 import SuggestIdeaForm from './SuggestIdeaForm'
 import SuggestParkUpdateForm from './SuggestParkUpdateForm'
 
@@ -37,8 +37,18 @@ export default function ParkModal({ park, onClose }: Props) {
         {/* Header */}
         <div className="sticky top-0 bg-green-700 text-white rounded-t-2xl p-5 flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold">{park.name}</h2>
-            {park.address && <p className="text-green-100 text-sm mt-1">{park.address}</p>}
+            <div className="flex items-center gap-2 mb-1">
+              <h2 className="text-xl font-bold">{park.name}</h2>
+              {park.place_type && (() => {
+                const pt = PLACE_TYPES.find(p => p.id === park.place_type)
+                return pt ? (
+                  <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium">
+                    {pt.emoji} {pt.label}
+                  </span>
+                ) : null
+              })()}
+            </div>
+            {park.address && <p className="text-green-100 text-sm">{park.address}</p>}
           </div>
           <button onClick={onClose} className="ml-4 text-white/80 hover:text-white text-2xl leading-none">×</button>
         </div>
