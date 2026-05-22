@@ -37,7 +37,7 @@ export default function Home() {
           <div>
             <h1 className="font-bold text-base leading-tight">Natureza Perto de Mim</h1>
             <p className="text-xs opacity-70">
-              Praças e brincadeiras com a natureza{' '}
+              áreas naturais e brincadeiras com a natureza{' '}
               <span className="opacity-50">|</span>{' '}
               criado por{' '}
               <a
