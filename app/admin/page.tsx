@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Park, PlayIdea, ParkSuggestion } from '@/lib/types'
-import { PARK_AMENITIES, SUITABLE_FOR } from '@/lib/types'
+import { PARK_AMENITIES, SUITABLE_FOR, PLACE_TYPES } from '@/lib/types'
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? 'scn2024'
 
@@ -75,6 +75,7 @@ export default function AdminPage() {
       description: editingPark.description,
       address: editingPark.address,
       trees,
+      place_type: editingPark.place_type ?? 'parque',
       amenities: editingPark.amenities ?? [],
       suitable_for: editingPark.suitable_for ?? [],
     }).eq('id', editingPark.id)
@@ -130,6 +131,19 @@ export default function AdminPage() {
           <div key={park.id} className="bg-white rounded-xl shadow-sm border p-4">
             {editingPark?.id === park.id ? (
               <div className="space-y-3">
+                <div>
+                  <p className="text-xs font-medium text-gray-600 mb-2">Tipo de lugar</p>
+                  <div className="flex gap-2">
+                    {PLACE_TYPES.map((type) => (
+                      <button key={type.id} type="button"
+                        onClick={() => setEditingPark({ ...editingPark, place_type: type.id as import('@/lib/types').PlaceType })}
+                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium border-2 transition-colors ${editingPark.place_type === type.id ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'}`}
+                      >
+                        {type.emoji} {type.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <input value={editingPark.name} onChange={(e) => setEditingPark({ ...editingPark, name: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2 text-sm font-semibold" placeholder="Nome" />
                 <input value={editingPark.address ?? ''} onChange={(e) => setEditingPark({ ...editingPark, address: e.target.value })}
