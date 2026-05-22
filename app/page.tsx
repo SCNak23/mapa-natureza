@@ -95,11 +95,26 @@ export default function Home() {
       </div>
 
       {/* Bottom legend */}
-      <div className="relative z-10 bg-white border-t px-4 py-2 flex items-center justify-between shrink-0">
-        <p className="text-xs text-gray-400">
-          {parks.length} lugar{parks.length !== 1 ? 'es' : ''} mapeado{parks.length !== 1 ? 's' : ''}
+      <div className="relative z-10 bg-white border-t px-4 py-2 shrink-0">
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-400">
+            {parks.length} lugar{parks.length !== 1 ? 'es' : ''} mapeado{parks.length !== 1 ? 's' : ''}
+          </p>
+          <p className="text-xs text-gray-400">Toque em um pin para ver brincadeiras</p>
+        </div>
+        <p className="text-xs text-center text-gray-400 mt-1">
+          versão teste{' '}
+          <span className="opacity-40">|</span>{' '}
+          ajude a melhorar a plataforma{' '}
+          <a
+            href="https://forms.gle/1r5gKhiq79jSUXk39"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold underline text-green-700 hover:text-green-800"
+          >
+            CLIQUE AQUI
+          </a>
         </p>
-        <p className="text-xs text-gray-400">Toque em um pin para ver brincadeiras</p>
       </div>
 
       {/* Park modal */}
